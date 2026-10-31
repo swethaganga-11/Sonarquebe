@@ -1,0 +1,470 @@
+SonarQube by KK FUNDA
+=====================
+
+
+Explain the flow diagram ----> Before maven and tomcat ----> SonarQube.
+
+
+Def:
+---
+
+-> SonarQube is an open-source platform used for continuous inspection of code quality. 
+
+-> It performs static code analysis to identify bugs, vulnerabilities, and code smells in your code.
+
+
+
+Key Features
+=============
+
+Code Quality and Security
+-------------------------
+
+Bugs and Vulnerabilities ---> Detect and fix issues that might lead to bugs or security vulnerabilities.
+
+Code Smells --> Identify maintainability issues in your code.
+
+Code Coverage --> Measure how much of your code is covered by tests.
+
+Duplication --> Detect duplicate code blocks.
+
+Technical Debt --> Estimate the effort required to fix all the issues in the code.
+
+
+Multi-Language Support
+----------------------
+
+Supports a wide range of programming languages including Java, JavaScript, C#, C++, Python, PHP, and many more.
+
+Quality Gates
+-------------
+Set thresholds for quality metrics to ensure code meets the standards before it is integrated into the main branch.
+
+
+
+
+
+
+
+
+
+
+
+
+
+similar tools
+--------------
+
+SonarQube
+Checkmarx
+Coverity
+Fortify Static Code Analyzer (SCA)
+Veracode
+PMD
+ESLint
+FindBugs/SpotBugs
+StyleCop
+Pylint
+ReSharper
+Flake8
+Codacy
+CodeClimate
+DeepSource
+Semmle LGTM
+Klocwork
+Infer
+Bandit
+Rubocop
+Brakeman
+
+
+what is the diff between code review and code coverage?
+=========================================================
+
+code coverage:
+--------------
+
+Number of lines tested through unit test cases called as code coverage.
+
+In any project 80% need to satisfy.
+
+Benefits: Helps identify untested areas of code
+
+Tools: Tools like JaCoCo (for Java)
+
+
+
+code review:
+------------
+
+Code review is the process of manually reviewing code by team members to find bugs, ensure to following  coding standards, and improve overall code quality.
+
+Benefits: It Leads to better software quality, fewer bugs, and promotes best practices within the development team.
+
+Tools: Code review tools include GitHub Pull Requests.
+
+
+
+
+
+
+
+
+
+
+
+
+SonarQube introduction
+=======================
+
+Type --> Continuous Code Quality
+Vendor --> Sonar
+Is it open source? --> for some programming languages.
+Vesrion ---> 9.x
+supporting OS --> cross platform
+Is it executable software ---> No, download as a zip and extract it.
+
+download link: https://www.sonarsource.com/products/sonarqube/downloads/
+
+
+
+
+
+
+
+
+
+more information about SonarQube
+---------------------------------
+
+--> SonarQube previously called as a Sonar , It is open source software quality management tool.
+--> It will continuosly analyze and measures quality of a source code.
+--> In case any issues found, It will generate in html format/ PDF format reports.
+--> It supports multiple languages like JAVA, c#, Java Script etc [Initially It was developed for JAVA]
+--> It is supporting OS like mac,Linux, windows , etc
+--> It will support multiple DBs like MYSQL, Oracle, PostgreSQL, etc
+--> It will supports multile browsers like chrome, safari, IE, Microsoft edge, etc
+--> It will identify the bwlow issues:
+   1. Duplicate code
+   2. Coding standards
+   3. unit test cases
+   4. complex code
+   5. comments
+   6. potential bugs [ Exception handlings]
+   .........
+
+NOTE: with the help of SonarQube report we can stop the deployment also.
+
+
+
+
+
+
+
+
+
+
+prerequsites for SonarQube Installation
+=======================================
+
+
+To install SonarQube, certain prerequisites must be met in terms of software and hardware requirements.
+
+Below are the detailed prerequisites for installing SonarQube:
+
+1. Hardware Requirements
+------------------------
+CPU: Modern multi-core processor.
+
+RAM: At least 2GB of RAM (4GB recommended for production).  go for t2.medium
+
+Disk Space: 1GB of free disk space for the SonarQube installation, plus additional space for the database.
+
+2. Software Requirements
+------------------------
+Operating System
+-----------------
+Linux (preferred)
+Windows
+macOS
+
+Java
+----
+Java JDK 11 or 17
+SonarQube requires the Java JDK (not just the JRE).
+Set the JAVA_HOME environment variable to point to your JDK installation.
+
+DB
+--
+Oracle
+MYSQL  --> Removed
+MS SQL SERVER
+POSTGRE SQL 
+
+DB is optional, Because of H2 is inbuild DB for SonarQube.
+
+
+
+
+
+Realtime bug [Most of the people are facing same issues]
+------------
+
+If you are by mistake started sonarqube server with root user, Then it will not start the sonarqube server.
+
+sudo su -
+cd /opt/sonarqube/bin/linux-x86-64
+
+sh sonar.sh start ---> It is showing started , But actually it is not started.
+sh sonar.sh status
+
+--> try now with sonar user
+
+su - sonar
+
+cd /opt/sonarqube/bin/linux-x86-64
+
+sh sonar.sh start ---> It is showing started , But actually it is not started.
+sh sonar.sh status
+
+NOTE: when you are getting this error , Then check the logs once.
+
+cd /opt/sonarqube/logs
+
+cat sonar.log  ---> temp directory created
+
+
+delete that dir:   sudo rm -rf /opt/sonarqube/temp/
+
+sh sonar.sh start 
+sh sonar.sh status
+Then start the sonarqube server from sonar user and check the status.
+http://13.233.55.221:9000/
+
+
+
+
+================================================================================================
+
+
+
+
+
+
+
+
+
+
+How to execute the sonarqube report for our java projects?
+==========================================================
+
+step 1: connect to the server[maven] , where your java projects are available.
+
+step 2: update the pom.xml with sonarqube details.
+
+        <properties>
+                <sonar.host.url>http://43.205.231.25:9000</sonar.host.url>
+                <sonar.login>admin</sonar.login>
+                <sonar.password>kkfunda</sonar.password>
+
+        </properties>
+step 3: generate the sonarqube report
+
+  mvn sonar:sonar package     [pluginName:goalName] 
+
+
+step 4: go to sonarqube server GUI , click on projects tab , where you can see the project.
+
+step 5: Open the project to see complete report.
+
+
+
+
+
+
+
+
+
+
+
+====================================================================================================
+
+Requirement: Instead of user_name and password hard coded in pom.xml , How to use the SQ server token.
+
+sol: 
+step 1:
+
+Goto adminstration --> security --> users --> click on tokens -->  Give the name --> click on generate---> copy [squ_cc48a3bf6387f56c0e7175f5a8ab99d63c0caa45] 
+
+step 2:  squ_cc48a3bf6387f56c0e7175f5a8ab99d63c0caa45
+update your token in pom.xml
+
+  <properties>
+                <sonar.host.url>http://43.205.231.25:9000</sonar.host.url>
+                <!-- 
+                <sonar.login>admin</sonar.login>
+                <sonar.password>kkfunda</sonar.password> 
+                -->
+               <sonar.login>squ_f16a79749bad93fb485aa8e2c3b323ef7f2c8b6d</sonar.login>
+    
+
+     </properties>
+
+step 3: Generate again:  mvn clean sonar:sonar
+
+
+====================================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+How to change the sonarQuber server port number?
+------------------------------------------------
+--> Default port number is : 9000
+--> Default context path: / 
+
+step 1: goto  cd /opt/sonarqube/conf
+
+step 2: vi sonar.properties  --> remove comment and add port and context path
+
+    105  sonar.web.context=/kkfunda
+    107  sonar.web.port=8639
+
+step 3: /opt/sonarqube/bin/linux-x86-64
+
+step 4: sh sonar.sh restart
+
+
+
+====================================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Projects
+---------
+It displays all the projects.
+
+issues
+-------
+It will diaplays all the project issues.
+
+Rules
+-----
+For each programming language we have rules.
+
+Quality Profile
+---------------
+-> Collection of rules , those can be applied during the sonarqube generation.
+-> For each language one quality profile will be there
+
+IQ] Is it possible to create a custom quality profile?
+ANs: Yes
+
+step 1: 
+
+Quality profiles --> create --> name [jio-qp] --> language [java] --> Parent [none] --> save
+
+step 2: 
+
+Goto quality profile --> check under java --> It will be created.
+
+step 3: Assign that quality profile to the project.
+
+Go to project --> select project --> project settings --> quality profiles --> java change profile --> Always use specific quality profile --> save 
+
+
+step 4: Now you can build : mvn clean sonar:sonar
+
+
+
+quality gates
+--------------
+--> set of conditions
+
+--> By default one quality gate is avaiable, i.e Sonar way
+
+How to create a quality gate?
+-----------------------------
+
+step 1: 
+
+Quality gates --> create --> name[jio-qg] -->save --> Add condition --> on overall code --> qg fails wahen --> coverage [80%] --> add --> 
+
+Add condition --> on overall code --> qg fails wahen --> Duplicate lines [3%] --> add 
+
+
+step 2:
+
+Go to project --> select project --> project settings --> quality gate --> java change profile --> Always use specific quality gate --> save 
+
+step 3: go and run the sonarqube report [mvn sonar:sonar]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Adminstration
+=============
+
+configuration
+-------------
+languages --> selct different languages --> and see the extensions
+
+security 
+--------
+security --> users --> create user --> give the details --> create 
+
+--> Then login with new credentials.
+
+How to give admin access to normal user?
+
+--> login with admin --> security --> users --> give sonar-admin access to normal user --> click on groups--> select all --> give admin access --> then login with user details.
+
+How to create a groups?
+
+--> login with admin --> security --> 
